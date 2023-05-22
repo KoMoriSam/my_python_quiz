@@ -1,10 +1,10 @@
-# my_python_quiz
+# 这是一份 Python 初学者自用的面试题练习
 
-# [原题链接](https://zhuanlan.zhihu.com/p/54430650?utm_id=0)
+> **原题链接** - [https://zhuanlan.zhihu.com/p/54430650?utm_id=0](https://zhuanlan.zhihu.com/p/54430650?utm_id=0)
 
 ## **001.** 一行代码实现 1-100 之和
 
-> 利用sum()函数求和
+> 利用 `sum()` 函数求和
 
 ```python
 >>> a = sum(range(1,101))
@@ -14,7 +14,7 @@
 
 ## **002.** 如何在一个函数内部修改全局变量
 
-> 利用 global 在函数声明，修改全局变量
+> 利用 `global` 在函数声明，修改全局变量
 
 ```python
 >>> a = 5
@@ -125,3 +125,45 @@ my_function('hello', 'world', 'how', 'are', 'you', name='Alice', age=25, locatio
 
 ## **011.** 简述面向对象中 `__new__` 和 `__init__` 区别
 
+> `__init__` 是初始化方法，创建对象后，就立刻被默认调用了，可接收参数，如:
+
+```python
+class Bike:
+
+    def __init__(self, newWheelNum, newColor):
+        self.wheelNum = newWheelNum
+        self.color = newColor
+
+    def move(self):
+        print('车会跑')
+
+# 创建对象
+BM = Bike(2, 'green')
+
+print(f'车的颜色为 {BM.color}')
+print(f'车轮数量为 {BM.wheelNum}')
+```
+
+1. `__new__` 至少要有一个参数 `cls` ，代表当前类，此参数在实例化时由Python解释器自动识别
+
+2. `__new__` 必须要有返回值，返回实例化出来的实例，这点在自己实现 `__new__` 时要特别注意，可以 `return` 父类（通过 `super` (当前类名, `cls`)）`__new__` 出来的实例，或者直接是 `object` 的 `__new__` 出来的实例
+
+3. `__init__` 有一个参数 `self`，就是这个 `__new__` 返回的实例，`__init__` 在 `__new__` 的基础上可以完成一些其它初始化的动作，`__init__` 不需要返回值
+
+4. 如果 `__new__` 创建的是当前类的实例，会自动调用 `__init__` 函数，通过 `return` 语句里面调用的 `__new__` 函数的第一个参数是 `cls` 来保证是当前类实例，如果是其他类的类名；那么实际创建返回的就是其他类的实例，其实就不会调用当前类的 `__init__` 函数，也不会调用其他类的 `__init__` 函数。
+
+```python
+class A(object):
+
+    def __init__(self):
+        print('这是 init 方法', self)
+
+    def __new__(cls):
+        print('')
+
+# 创建对象
+BM = Bike(2, 'green')
+
+print(f'车的颜色为 {BM.color}')
+print(f'车轮数量为 {BM.wheelNum}')
+```
